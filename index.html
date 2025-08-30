@@ -11,6 +11,58 @@
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
         }
+        /* Custom styles for the carousel */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+        }
+        .carousel-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem;
+            border-radius: 9999px;
+            z-index: 10;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .carousel-btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        .carousel-btn.left {
+            left: 1rem;
+        }
+        .carousel-btn.right {
+            right: 1rem;
+        }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .carousel-dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            background-color: #d1d5db; /* gray-300 */
+            border-radius: 9999px;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .carousel-dot.active {
+            background-color: #2563eb; /* blue-600 */
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
@@ -23,49 +75,89 @@
             <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Stellar Motors</h1>
         </div>
         <nav>
-            <a href="#" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200">About</a>
+            <a href="about.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200">About</a>
             <a href="#" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200 ml-4">Contact</a>
         </nav>
     </header>
 
     <!-- Main Content -->
     <main class="container mx-auto mt-24 px-4 py-8 flex-grow">
-        <h2 class="text-3xl font-semibold text-center text-gray-900 mb-8">Our Inventory</h2>
+        <!-- Inventory View -->
+        <div id="inventory-view">
+            <h2 class="text-3xl font-semibold text-center text-gray-900 mb-8">Our Inventory</h2>
 
-        <!-- Search and Filter Section -->
-        <div class="mb-8 p-6 bg-white rounded-lg shadow-md flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
-            <input type="text" id="search-input" placeholder="Search by model..." class="flex-grow w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-            <select id="make-filter" class="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                <option value="">All Makes</option>
-            </select>
-            <select id="year-filter" class="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                <option value="">All Years</option>
-            </select>
+            <!-- Search and Filter Section -->
+            <div class="mb-8 p-6 bg-white rounded-lg shadow-md flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
+                <input type="text" id="search-input" placeholder="Search by model..." class="flex-grow w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                <select id="make-filter" class="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                    <option value="">All Makes</option>
+                </select>
+                <select id="year-filter" class="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                    <option value="">All Years</option>
+                </select>
+            </div>
+
+            <div id="car-listings" class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <!-- Car cards will be dynamically inserted here -->
+            </div>
         </div>
 
-        <div id="car-listings" class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <!-- Car cards will be dynamically inserted here -->
-        </div>
-
-        <!-- Modal for car details -->
-        <div id="details-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden z-50">
-            <div class="bg-white rounded-lg shadow-xl p-6 md:p-8 m-4 max-w-lg w-full transform transition-all">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 id="modal-car-name" class="text-2xl font-bold text-gray-900"></h3>
-                    <button id="close-modal" class="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 rounded-full p-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+        <!-- Car Details View -->
+        <div id="details-view" class="hidden">
+            <div class="flex items-center mb-8">
+                <button id="back-to-inventory" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <h2 id="details-car-name" class="text-3xl font-semibold text-gray-900"></h2>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 md:p-8 flex flex-col lg:flex-row lg:space-x-8">
+                <div class="lg:w-1/2">
+                    <!-- Carousel container -->
+                    <div id="image-carousel" class="carousel-container mb-6 lg:mb-0">
+                        <div id="carousel-track" class="carousel-track">
+                            <!-- Carousel slides will be dynamically added here -->
+                        </div>
+                        <button id="carousel-prev" class="carousel-btn left text-gray-800 focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <button id="carousel-next" class="carousel-btn right text-gray-800 focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="carousel-dots" class="carousel-dots">
+                        <!-- Dots will be dynamically added here -->
+                    </div>
                 </div>
-                <div class="flex flex-col md:flex-row md:space-x-6">
-                    <img id="modal-car-image" src="" alt="Car Image" class="w-full h-auto object-cover rounded-md mb-4 md:mb-0 md:w-1/2">
-                    <div class="md:w-1/2">
-                        <p class="text-lg font-medium text-gray-700">Price: <span id="modal-car-price" class="font-bold text-blue-600"></span></p>
-                        <p class="mt-2 text-gray-700">Year: <span id="modal-car-year" class="font-medium"></span></p>
-                        <p class="mt-2 text-gray-700">Mileage: <span id="modal-car-mileage" class="font-medium"></span></p>
-                        <p class="mt-2 text-gray-700">Color: <span id="modal-car-color" class="font-medium"></span></p>
-                        <p class="mt-4 text-sm text-gray-500" id="modal-car-description"></p>
+                
+                <div class="lg:w-1/2 flex flex-col justify-between">
+                    <div>
+                        <p class="text-4xl font-bold text-blue-600 mb-4" id="details-car-price"></p>
+                        <div class="space-y-2 mb-6 text-gray-700">
+                            <p><strong>Year:</strong> <span id="details-car-year"></span></p>
+                            <p><strong>Mileage:</strong> <span id="details-car-mileage"></span></p>
+                            <p><strong>Color:</strong> <span id="details-car-color"></span></p>
+                        </div>
+                        <p id="details-car-description" class="text-gray-500 text-sm leading-relaxed"></p>
+                    </div>
+
+                    <!-- Inquiry Form Section -->
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <h4 class="text-xl font-semibold text-gray-900 mb-4">Inquire About This Car</h4>
+                        <form id="inquiry-form" class="space-y-4">
+                            <input type="hidden" id="inquiry-car-model">
+                            <input type="text" id="inquiry-name" placeholder="Your Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="email" id="inquiry-email" placeholder="Your Email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <textarea id="inquiry-message" placeholder="Your Message..." required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"></textarea>
+                            <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">Send Inquiry</button>
+                        </form>
+                        <div id="form-message" class="mt-4 text-center text-sm font-medium text-blue-600 hidden"></div>
                     </div>
                 </div>
             </div>
@@ -83,22 +175,35 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const carListingsContainer = document.getElementById('car-listings');
-            const detailsModal = document.getElementById('details-modal');
-            const closeModalBtn = document.getElementById('close-modal');
-            const modalCarName = document.getElementById('modal-car-name');
-            const modalCarPrice = document.getElementById('modal-car-price');
-            const modalCarYear = document.getElementById('modal-car-year');
-            const modalCarMileage = document.getElementById('modal-car-mileage');
-            const modalCarColor = document.getElementById('modal-car-color');
-            const modalCarDescription = document.getElementById('modal-car-description');
-            const modalCarImage = document.getElementById('modal-car-image');
+            const inventoryView = document.getElementById('inventory-view');
+            const detailsView = document.getElementById('details-view');
+            const backToInventoryBtn = document.getElementById('back-to-inventory');
+
+            const detailsCarName = document.getElementById('details-car-name');
+            const detailsCarPrice = document.getElementById('details-car-price');
+            const detailsCarYear = document.getElementById('details-car-year');
+            const detailsCarMileage = document.getElementById('details-car-mileage');
+            const detailsCarColor = document.getElementById('details-car-color');
+            const detailsCarDescription = document.getElementById('details-car-description');
+            
+            // Carousel elements
+            const carouselTrack = document.getElementById('carousel-track');
+            const carouselPrevBtn = document.getElementById('carousel-prev');
+            const carouselNextBtn = document.getElementById('carousel-next');
+            const carouselDotsContainer = document.getElementById('carousel-dots');
+            let currentSlide = 0;
 
             // Filter UI elements
             const searchInput = document.getElementById('search-input');
             const makeFilter = document.getElementById('make-filter');
             const yearFilter = document.getElementById('year-filter');
 
-            // Sample car data with enhanced details
+            // Inquiry form elements
+            const inquiryForm = document.getElementById('inquiry-form');
+            const inquiryCarModelInput = document.getElementById('inquiry-car-model');
+            const formMessageDiv = document.getElementById('form-message');
+
+            // Sample car data with images and multiple image URLs for carousel
             const cars = [
                 {
                     make: 'Honda',
@@ -107,8 +212,12 @@
                     price: 25000,
                     mileage: '15,000 miles',
                     color: 'Modern Steel Metallic',
-                    description: 'The 2022 Honda Civic is a stylish, reliable sedan with excellent fuel economy. Perfect for daily commutes.',
-                    image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Honda+Civic'
+                    photo_card_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Honda+Civic',
+                    photo_urls: [
+                        'https://placehold.co/800x600/e2e8f0/1a202c?text=Honda+Civic+Front',
+                        'https://placehold.co/800x600/cbd5e0/2d3748?text=Honda+Civic+Side',
+                        'https://placehold.co/800x600/a0aec0/4a5568?text=Honda+Civic+Interior'
+                    ]
                 },
                 {
                     make: 'Tesla',
@@ -118,7 +227,12 @@
                     mileage: '8,000 miles',
                     color: 'Pearl White Multi-Coat',
                     description: 'A groundbreaking electric vehicle with impressive performance and cutting-edge technology. Experience the future of driving.',
-                    image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Tesla+Model+3'
+                    photo_card_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Tesla+Model+3',
+                    photo_urls: [
+                        'https://placehold.co/800x600/e2e8f0/1a202c?text=Tesla+Model+3+Front',
+                        'https://placehold.co/800x600/cbd5e0/2d3748?text=Tesla+Model+3+Side',
+                        'https://placehold.co/800x600/a0aec0/4a5568?text=Tesla+Model+3+Interior'
+                    ]
                 },
                 {
                     make: 'Ford',
@@ -128,7 +242,12 @@
                     mileage: '22,500 miles',
                     color: 'Race Red',
                     description: 'Classic American muscle car with a powerful engine and iconic design. Turn heads everywhere you go.',
-                    image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Ford+Mustang'
+                    photo_card_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Ford+Mustang',
+                    photo_urls: [
+                        'https://placehold.co/800x600/e2e8f0/1a202c?text=Ford+Mustang+Front',
+                        'https://placehold.co/800x600/cbd5e0/2d3748?text=Ford+Mustang+Side',
+                        'https://placehold.co/800x600/a0aec0/4a5568?text=Ford+Mustang+Interior'
+                    ]
                 },
                 {
                     make: 'Toyota',
@@ -138,7 +257,12 @@
                     mileage: '12,000 miles',
                     color: 'Magnetic Gray Metallic',
                     description: 'A versatile and dependable compact SUV, ideal for family adventures and city driving. Known for its reliability.',
-                    image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Toyota+RAV4'
+                    photo_card_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Toyota+RAV4',
+                    photo_urls: [
+                        'https://placehold.co/800x600/e2e8f0/1a202c?text=Toyota+RAV4+Front',
+                        'https://placehold.co/800x600/cbd5e0/2d3748?text=Toyota+RAV4+Side',
+                        'https://placehold.co/800x600/a0aec0/4a5568?text=Toyota+RAV4+Interior'
+                    ]
                 },
                 {
                     make: 'BMW',
@@ -148,7 +272,12 @@
                     mileage: '18,750 miles',
                     color: 'Black Sapphire Metallic',
                     description: 'Luxury SUV combining elegant design with powerful performance. Offers a smooth ride and premium features.',
-                    image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=BMW+X5'
+                    photo_card_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=BMW+X5',
+                    photo_urls: [
+                        'https://placehold.co/800x600/e2e8f0/1a202c?text=BMW+X5+Front',
+                        'https://placehold.co/800x600/cbd5e0/2d3748?text=BMW+X5+Side',
+                        'https://placehold.co/800x600/a0aec0/4a5568?text=BMW+X5+Interior'
+                    ]
                 },
                 {
                     make: 'Jeep',
@@ -158,7 +287,12 @@
                     mileage: '28,000 miles',
                     color: 'Sting-Gray Clearcoat',
                     description: 'The ultimate off-road vehicle, built to handle any terrain. Get ready for your next adventure.',
-                    image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Jeep+Wrangler'
+                    photo_card_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Jeep+Wrangler',
+                    photo_urls: [
+                        'https://placehold.co/800x600/e2e8f0/1a202c?text=Jeep+Wrangler+Front',
+                        'https://placehold.co/800x600/cbd5e0/2d3748?text=Jeep+Wrangler+Side',
+                        'https://placehold.co/800x600/a0aec0/4a5568?text=Jeep+Wrangler+Interior'
+                    ]
                 },
                 {
                     make: 'Chevrolet',
@@ -168,7 +302,12 @@
                     mileage: '10,500 miles',
                     color: 'Summit White',
                     description: 'A reliable and strong pickup truck, perfect for work or play. Great towing capacity and rugged build.',
-                    image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Chevy+Silverado'
+                    photo_card_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Chevy+Silverado',
+                    photo_urls: [
+                        'https://placehold.co/800x600/e2e8f0/1a202c?text=Chevy+Silverado+Front',
+                        'https://placehold.co/800x600/cbd5e0/2d3748?text=Chevy+Silverado+Side',
+                        'https://placehold.co/800x600/a0aec0/4a5568?text=Chevy+Silverado+Interior'
+                    ]
                 },
                 {
                     make: 'Nissan',
@@ -178,7 +317,12 @@
                     mileage: '20,000 miles',
                     color: 'Super Black',
                     description: 'A comfortable and spacious sedan with modern features. Offers a great balance of performance and fuel efficiency.',
-                    image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Nissan+Altima'
+                    photo_card_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Nissan+Altima',
+                    photo_urls: [
+                        'https://placehold.co/800x600/e2e8f0/1a202c?text=Nissan+Altima+Front',
+                        'https://placehold.co/800x600/cbd5e0/2d3748?text=Nissan+Altima+Side',
+                        'https://placehold.co/800x600/a0aec0/4a5568?text=Nissan+Altima+Interior'
+                    ]
                 }
             ];
 
@@ -198,12 +342,12 @@
                     const card = document.createElement('div');
                     card.className = 'bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden cursor-pointer';
                     card.innerHTML = `
-                        <img src="${car.image_url}" onerror="this.onerror=null; this.src='https://placehold.co/400x300/e2e8f0/1a202c?text=Image+Not+Found';" alt="${car.make} ${car.model}" class="w-full h-48 object-cover">
+                        <img src="${car.photo_card_url}" alt="${car.make} ${car.model}" class="w-full h-48 object-cover rounded-t-xl">
                         <div class="p-6">
                             <h3 class="text-xl font-semibold text-gray-900">${car.make} ${car.model}</h3>
                             <p class="text-gray-500 mt-1">${car.year}</p>
                             <p class="text-2xl font-bold text-blue-600 mt-4">${formatPrice(car.price)}</p>
-                            <button class="view-details-btn mt-4 w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500" data-car='${JSON.stringify(car)}'>View Details</button>
+                            <button class="view-details-btn mt-4 w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500" data-car-index="${cars.indexOf(car)}">View Details</button>
                         </div>
                     `;
                     carListingsContainer.appendChild(card);
@@ -226,6 +370,95 @@
 
                 displayCars(filtered);
             };
+            
+            // Function to show/hide views
+            const showView = (viewName) => {
+                if (viewName === 'inventory') {
+                    inventoryView.classList.remove('hidden');
+                    detailsView.classList.add('hidden');
+                } else if (viewName === 'details') {
+                    inventoryView.classList.add('hidden');
+                    detailsView.classList.remove('hidden');
+                }
+            };
+            
+            // Function to populate details page
+            const renderCarDetails = (carData) => {
+                detailsCarName.textContent = `${carData.make} ${carData.model}`;
+                detailsCarPrice.textContent = formatPrice(carData.price);
+                detailsCarYear.textContent = carData.year;
+                detailsCarMileage.textContent = carData.mileage;
+                detailsCarColor.textContent = carData.color;
+                detailsCarDescription.textContent = carData.description;
+                
+                // Set the hidden input value for the form
+                inquiryCarModelInput.value = `${carData.make} ${carData.model}`;
+
+                // Populate carousel
+                carouselTrack.innerHTML = '';
+                carouselDotsContainer.innerHTML = '';
+                carData.photo_urls.forEach(url => {
+                    const slide = document.createElement('div');
+                    slide.className = 'carousel-slide';
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = `${carData.make} ${carData.model} image`;
+                    img.className = 'w-full h-auto object-cover rounded-md shadow-lg';
+                    slide.appendChild(img);
+                    carouselTrack.appendChild(slide);
+
+                    const dot = document.createElement('div');
+                    dot.className = 'carousel-dot';
+                    carouselDotsContainer.appendChild(dot);
+                });
+                updateCarousel();
+
+                // Reset and hide form message
+                inquiryForm.reset();
+                formMessageDiv.classList.add('hidden');
+            };
+
+            // Carousel control functions
+            const updateCarousel = () => {
+                const offset = -currentSlide * 100;
+                carouselTrack.style.transform = `translateX(${offset}%)`;
+                
+                // Update dots
+                Array.from(carouselDotsContainer.children).forEach((dot, index) => {
+                    if (index === currentSlide) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            };
+
+            carouselNextBtn.addEventListener('click', () => {
+                if (currentSlide < cars[currentCarIndex].photo_urls.length - 1) {
+                    currentSlide++;
+                } else {
+                    currentSlide = 0; // Loop back to start
+                }
+                updateCarousel();
+            });
+
+            carouselPrevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                } else {
+                    currentSlide = cars[currentCarIndex].photo_urls.length - 1; // Loop to end
+                }
+                updateCarousel();
+            });
+
+            carouselDotsContainer.addEventListener('click', (event) => {
+                const clickedDot = event.target;
+                if (clickedDot.classList.contains('carousel-dot')) {
+                    const dotIndex = Array.from(carouselDotsContainer.children).indexOf(clickedDot);
+                    currentSlide = dotIndex;
+                    updateCarousel();
+                }
+            });
 
             // Populate filter dropdowns with unique values
             const uniqueMakes = [...new Set(cars.map(car => car.make))].sort();
@@ -248,32 +481,51 @@
             searchInput.addEventListener('input', filterCars);
             makeFilter.addEventListener('change', filterCars);
             yearFilter.addEventListener('change', filterCars);
+            
+            let currentCarIndex;
 
-            // Show modal on button click (using event delegation)
+            // Add event listener for showing details page
             carListingsContainer.addEventListener('click', (event) => {
                 if (event.target.classList.contains('view-details-btn')) {
-                    const carData = JSON.parse(event.target.getAttribute('data-car'));
-                    modalCarName.textContent = `${carData.make} ${carData.model}`;
-                    modalCarPrice.textContent = formatPrice(carData.price);
-                    modalCarYear.textContent = carData.year;
-                    modalCarMileage.textContent = carData.mileage;
-                    modalCarColor.textContent = carData.color;
-                    modalCarDescription.textContent = carData.description;
-                    modalCarImage.src = carData.image_url;
-                    detailsModal.classList.remove('hidden');
+                    const carIndex = event.target.getAttribute('data-car-index');
+                    currentCarIndex = carIndex;
+                    const carData = cars[carIndex];
+                    renderCarDetails(carData);
+                    showView('details');
                 }
             });
-
-            // Hide modal
-            closeModalBtn.addEventListener('click', () => {
-                detailsModal.classList.add('hidden');
+            
+            // Add event listener for back button
+            backToInventoryBtn.addEventListener('click', () => {
+                showView('inventory');
             });
 
-            // Hide modal if user clicks outside of it
-            detailsModal.addEventListener('click', (event) => {
-                if (event.target === detailsModal) {
-                    detailsModal.classList.add('hidden');
-                }
+            // Handle form submission
+            inquiryForm.addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent page reload
+                
+                // Here you would typically send the data to a server
+                const inquiryData = {
+                    car: inquiryCarModelInput.value,
+                    name: document.getElementById('inquiry-name').value,
+                    email: document.getElementById('inquiry-email').value,
+                    message: document.getElementById('inquiry-message').value
+                };
+
+                console.log('Inquiry submitted:', inquiryData);
+                
+                // Show a success message
+                formMessageDiv.textContent = 'Thank you for your inquiry! We will get back to you shortly.';
+                formMessageDiv.classList.remove('hidden');
+                formMessageDiv.classList.add('text-green-600');
+
+                // Clear the form fields
+                inquiryForm.reset();
+
+                // Hide the message after a few seconds
+                setTimeout(() => {
+                    formMessageDiv.classList.add('hidden');
+                }, 5000);
             });
 
             // Initial display of all cars
