@@ -17,7 +17,7 @@
             width: 100%;
             overflow: hidden;
             border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1-2px rgba(0, 0, 0, 0.06);
         }
         .carousel-track {
             display: flex;
@@ -75,8 +75,13 @@
             <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Stellar Motors</h1>
         </div>
         <nav>
-            <a href="about.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200">About</a>
-            <a href="#" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200 ml-4">Contact</a>
+            <a href="index.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200">Home</a>
+            <a href="about.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200 ml-4">About</a>
+            <a href="contact.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200 ml-4">Contact</a>
+            <a href="Finance.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200 ml-4">Finance</a>
+            <a href="Services.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200 ml-4">Services</a>
+
+       
         </nav>
     </header>
 
@@ -162,6 +167,34 @@
                 </div>
             </div>
         </div>
+
+        <!-- Customer Reviews Section -->
+        <div class="mt-12">
+            <h2 class="text-3xl font-semibold text-center text-gray-900 mb-8">What Our Customers Say</h2>
+
+            <!-- Review Submission Form -->
+            <div class="bg-white p-8 rounded-xl shadow-lg mb-8">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-4">Leave a Review</h3>
+                <form id="review-form" class="space-y-4">
+                    <input type="text" id="reviewer-name" placeholder="Your Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    <div class="flex items-center space-x-2">
+                        <label class="text-gray-700">Rating:</label>
+                        <div id="star-rating" class="flex items-center space-x-1">
+                            <!-- Star icons will be generated here -->
+                        </div>
+                        <input type="hidden" id="review-rating" required>
+                    </div>
+                    <textarea id="review-text" placeholder="Write your review here..." rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">Submit Review</button>
+                </form>
+                <div id="review-form-message" class="mt-4 text-center text-sm font-medium text-blue-600 hidden"></div>
+            </div>
+
+            <!-- Reviews Display Section -->
+            <div id="reviews-list" class="space-y-6">
+                <!-- Reviews will be dynamically inserted here -->
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -173,7 +206,90 @@
     </footer>
 
     <script>
+        // Sample mock reviews to be displayed
+        const mockReviews = [
+            { name: "Jane Doe", rating: 5, text: "Outstanding service and a great selection of cars! My experience was seamless from start to finish.", timestamp: new Date(2023, 10, 15) },
+            { name: "John Smith", rating: 4, text: "Friendly staff and fair pricing. Found the perfect car for my family. Would highly recommend!", timestamp: new Date(2023, 10, 10) },
+            { name: "Sarah Lee", rating: 5, text: "The team at Stellar Motors was incredible. They were transparent, honest, and helped me get a fantastic deal.", timestamp: new Date(2023, 10, 5) }
+        ];
+
+        // Function to render reviews
+        const renderReviews = (reviews) => {
+            const reviewsList = document.getElementById('reviews-list');
+            reviewsList.innerHTML = ''; // Clear existing reviews
+            
+            if (reviews.length === 0) {
+                reviewsList.innerHTML = '<p class="text-center text-gray-500">No reviews yet. Be the first to leave one!</p>';
+                return;
+            }
+
+            reviews.forEach(review => {
+                const reviewCard = document.createElement('div');
+                reviewCard.className = 'bg-white rounded-xl shadow-lg p-6';
+
+                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                
+                reviewCard.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <p class="font-semibold text-gray-900">${review.name}</p>
+                        <p class="text-yellow-400 font-bold">${stars}</p>
+                    </div>
+                    <p class="text-gray-700">${review.text}</p>
+                    <p class="text-gray-400 text-sm mt-2">${review.timestamp.toLocaleDateString()}</p>
+                `;
+                reviewsList.appendChild(reviewCard);
+            });
+        };
+
+        // Review Form Submission
         document.addEventListener('DOMContentLoaded', () => {
+            const reviewForm = document.getElementById('review-form');
+            const reviewFormMessage = document.getElementById('review-form-message');
+            const starRatingContainer = document.getElementById('star-rating');
+            const reviewRatingInput = document.getElementById('review-rating');
+
+            // Initialize star rating
+            let selectedRating = 0;
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement('span');
+                star.textContent = '☆';
+                star.className = 'text-2xl text-yellow-400 cursor-pointer transition-colors duration-200';
+                star.dataset.value = i;
+                star.addEventListener('click', () => {
+                    selectedRating = i;
+                    reviewRatingInput.value = i;
+                    updateStars(i);
+                });
+                starRatingContainer.appendChild(star);
+            }
+
+            const updateStars = (rating) => {
+                const stars = starRatingContainer.querySelectorAll('span');
+                stars.forEach((star) => {
+                    star.textContent = star.dataset.value <= rating ? '★' : '☆';
+                });
+            };
+
+            reviewForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                if (selectedRating === 0) {
+                    reviewFormMessage.textContent = 'Please select a rating.';
+                    reviewFormMessage.classList.remove('hidden');
+                    return;
+                }
+
+                reviewForm.reset();
+                selectedRating = 0;
+                reviewRatingInput.value = '';
+                updateStars(0);
+
+                reviewFormMessage.textContent = 'Thank you for your review!';
+                reviewFormMessage.classList.remove('hidden');
+                setTimeout(() => reviewFormMessage.classList.add('hidden'), 3000);
+            });
+
+            // The rest of your existing JS logic for car listings goes here
             const carListingsContainer = document.getElementById('car-listings');
             const inventoryView = document.getElementById('inventory-view');
             const detailsView = document.getElementById('details-view');
@@ -528,8 +644,9 @@
                 }, 5000);
             });
 
-            // Initial display of all cars
+            // Initial display of all cars and reviews
             displayCars(cars);
+            renderReviews(mockReviews);
         });
     </script>
 </body>

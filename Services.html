@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Stellar Motors</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md py-4 px-6 md:px-12 flex justify-between items-center fixed top-0 left-0 w-full z-10">
+        <div class="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.182 1.706.703 1.706H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Stellar Motors</h1>
+        </div>
+        <nav>
+            <a href="index.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200">Home</a>
+            <a href="about.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200 ml-4">About</a>
+            <a href="contact.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200 ml-4">Contact</a>
+            <a href="services.html" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200 ml-4">Services</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto mt-24 px-4 py-8 flex-grow">
+        <h2 class="text-4xl font-bold text-center text-gray-900 mb-8">Our Certified Service Center</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <!-- Service Scheduling Form -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-4">Schedule Your Next Service</h3>
+                <form id="service-form" class="space-y-4">
+                    <div>
+                        <label for="service-name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                        <input type="text" id="service-name" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="service-email" class="block text-sm font-medium text-gray-700">Your Email</label>
+                        <input type="email" id="service-email" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="service-phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <input type="tel" id="service-phone" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="service-date" class="block text-sm font-medium text-gray-700">Preferred Date</label>
+                        <input type="date" id="service-date" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="service-time" class="block text-sm font-medium text-gray-700">Preferred Time</label>
+                        <input type="time" id="service-time" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="service-type" class="block text-sm font-medium text-gray-700">Service Required</label>
+                        <select id="service-type" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select a service...</option>
+                            <option value="Oil Change">Oil Change</option>
+                            <option value="Tire Rotation">Tire Rotation</option>
+                            <option value="Brake Inspection">Brake Inspection</option>
+                            <option value="Engine Diagnostics">Engine Diagnostics</option>
+                            <option value="Other">Other (specify below)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="service-message" class="block text-sm font-medium text-gray-700">Additional Comments</label>
+                        <textarea id="service-message" rows="4" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">Schedule Appointment</button>
+                    <div id="service-form-message" class="mt-4 text-center text-sm font-medium text-blue-600 hidden"></div>
+                </form>
+            </div>
+
+            <!-- Service Menu and Why Choose Us -->
+            <div class="space-y-8">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">Our Service Menu</h3>
+                    <p class="text-gray-600 mb-4">From routine maintenance to major repairs, our team is equipped to handle all your vehicle needs.</p>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <span class="font-medium text-gray-700">Oil Change</span>
+                            <span class="text-blue-600 font-bold">$49 - $99</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <span class="font-medium text-gray-700">Tire Rotation</span>
+                            <span class="text-blue-600 font-bold">$25 - $45</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <span class="font-medium text-gray-700">Brake Pad Replacement</span>
+                            <span class="text-blue-600 font-bold">$150 - $300</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <span class="font-medium text-gray-700">Wheel Alignment</span>
+                            <span class="text-blue-600 font-bold">$80 - $120</span>
+                        </div>
+                        <div class="flex justify-between items-center pb-2">
+                            <span class="font-medium text-gray-700">Engine Diagnostics</span>
+                            <span class="text-blue-600 font-bold">Free with service</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">Why Service With Us?</h3>
+                    <ul class="space-y-4 text-gray-700">
+                        <li class="flex items-start space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-5.618 1.04A12.023 12.023 0 003 13.564c.335 1.134.802 2.19 1.402 3.193M12 21a9 9 0 00-4.04-1.018A11.955 11.955 0 0112 2.944a11.955 11.955 0 014.04 1.018A12.023 12.023 0 0021 13.564c-.335 1.134-.802 2.19-1.402 3.193M12 21v-4.5" />
+                            </svg>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Certified Technicians</h4>
+                                <p class="text-sm">Our service team is factory-trained and certified to work on all makes and models, using the latest diagnostic tools.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10m0 0h16a2 2 0 002-2V9a2 2 0 00-2-2H4a2 2 0 00-2 2v6a2 2 0 002 2zm16-4h-4m-4 0h-4" />
+                            </svg>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Genuine Parts</h4>
+                                <p class="text-sm">We use only high-quality, genuine manufacturer parts to ensure the best performance and longevity for your vehicle.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m-3-11a9 9 0 110 18 9 9 0 010-18z" />
+                            </svg>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Express Service</h4>
+                                <p class="text-sm">For routine maintenance like oil changes and tire rotations, get in and out quickly with our express service lane.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-6 px-4 md:px-12 mt-auto">
+        <div class="container mx-auto text-center text-sm">
+            <p>&copy; 2023 Stellar Motors. All rights reserved.</p>
+            <p class="mt-1">123 Car Avenue, Auto City, CA 90210 | (555) 123-4567</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const serviceForm = document.getElementById('service-form');
+            const serviceFormMessage = document.getElementById('service-form-message');
+
+            serviceForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                // In a real application, this data would be sent to a server.
+                const formData = {
+                    name: document.getElementById('service-name').value,
+                    email: document.getElementById('service-email').value,
+                    phone: document.getElementById('service-phone').value,
+                    date: document.getElementById('service-date').value,
+                    time: document.getElementById('service-time').value,
+                    serviceType: document.getElementById('service-type').value,
+                    message: document.getElementById('service-message').value
+                };
+                console.log('Service appointment submitted:', formData);
+
+                serviceFormMessage.textContent = 'Thank you! Your service appointment has been requested.';
+                serviceFormMessage.classList.remove('hidden');
+                setTimeout(() => serviceFormMessage.classList.add('hidden'), 5000);
+                serviceForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>
