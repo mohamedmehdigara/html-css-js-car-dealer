@@ -31,6 +31,18 @@
     <!-- Main Content -->
     <main class="container mx-auto mt-24 px-4 py-8 flex-grow">
         <h2 class="text-3xl font-semibold text-center text-gray-900 mb-8">Our Inventory</h2>
+
+        <!-- Search and Filter Section -->
+        <div class="mb-8 p-6 bg-white rounded-lg shadow-md flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
+            <input type="text" id="search-input" placeholder="Search by model..." class="flex-grow w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+            <select id="make-filter" class="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                <option value="">All Makes</option>
+            </select>
+            <select id="year-filter" class="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                <option value="">All Years</option>
+            </select>
+        </div>
+
         <div id="car-listings" class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <!-- Car cards will be dynamically inserted here -->
         </div>
@@ -74,6 +86,11 @@
             const modalCarPrice = document.getElementById('modal-car-price');
             const modalCarDescription = document.getElementById('modal-car-description');
             const modalCarImage = document.getElementById('modal-car-image');
+
+            // Filter UI elements
+            const searchInput = document.getElementById('search-input');
+            const makeFilter = document.getElementById('make-filter');
+            const yearFilter = document.getElementById('year-filter');
 
             // Sample car data
             const cars = [
@@ -148,23 +165,69 @@
                 return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
             };
 
-            // Dynamically generate car cards
-            cars.forEach(car => {
-                const card = document.createElement('div');
-                card.className = 'bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden cursor-pointer';
-                card.innerHTML = `
-                    <img src="${car.image_url}" onerror="this.onerror=null; this.src='https://placehold.co/400x300/e2e8f0/1a202c?text=Image+Not+Found';" alt="${car.make} ${car.model}" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900">${car.make} ${car.model}</h3>
-                        <p class="text-gray-500 mt-1">${car.year}</p>
-                        <p class="text-2xl font-bold text-blue-600 mt-4">${formatPrice(car.price)}</p>
-                        <button class="view-details-btn mt-4 w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500" data-car='${JSON.stringify(car)}'>View Details</button>
-                    </div>
-                `;
-                carListingsContainer.appendChild(card);
+            // Function to display cars based on a filtered array
+            const displayCars = (filteredCars) => {
+                carListingsContainer.innerHTML = ''; // Clear existing cards
+                if (filteredCars.length === 0) {
+                    carListingsContainer.innerHTML = '<p class="text-center text-lg text-gray-500 col-span-full">No cars match your search criteria.</p>';
+                }
+
+                filteredCars.forEach(car => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden cursor-pointer';
+                    card.innerHTML = `
+                        <img src="${car.image_url}" onerror="this.onerror=null; this.src='https://placehold.co/400x300/e2e8f0/1a202c?text=Image+Not+Found';" alt="${car.make} ${car.model}" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-900">${car.make} ${car.model}</h3>
+                            <p class="text-gray-500 mt-1">${car.year}</p>
+                            <p class="text-2xl font-bold text-blue-600 mt-4">${formatPrice(car.price)}</p>
+                            <button class="view-details-btn mt-4 w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500" data-car='${JSON.stringify(car)}'>View Details</button>
+                        </div>
+                    `;
+                    carListingsContainer.appendChild(card);
+                });
+            };
+
+            // Function to filter cars based on UI input
+            const filterCars = () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedMake = makeFilter.value;
+                const selectedYear = yearFilter.value;
+
+                const filtered = cars.filter(car => {
+                    const matchesSearch = car.model.toLowerCase().includes(searchTerm);
+                    const matchesMake = selectedMake === '' || car.make === selectedMake;
+                    const matchesYear = selectedYear === '' || car.year.toString() === selectedYear;
+
+                    return matchesSearch && matchesMake && matchesYear;
+                });
+
+                displayCars(filtered);
+            };
+
+            // Populate filter dropdowns with unique values
+            const uniqueMakes = [...new Set(cars.map(car => car.make))].sort();
+            uniqueMakes.forEach(make => {
+                const option = document.createElement('option');
+                option.value = make;
+                option.textContent = make;
+                makeFilter.appendChild(option);
             });
 
-            // Show modal on button click
+            const uniqueYears = [...new Set(cars.map(car => car.year))].sort((a, b) => b - a);
+            uniqueYears.forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearFilter.appendChild(option);
+            });
+
+            // Add event listeners for filtering
+            searchInput.addEventListener('input', filterCars);
+            makeFilter.addEventListener('change', filterCars);
+            yearFilter.addEventListener('change', filterCars);
+
+            // Show modal on button click (using event delegation)
             carListingsContainer.addEventListener('click', (event) => {
                 if (event.target.classList.contains('view-details-btn')) {
                     const carData = JSON.parse(event.target.getAttribute('data-car'));
@@ -187,6 +250,9 @@
                     detailsModal.classList.add('hidden');
                 }
             });
+
+            // Initial display of all cars
+            displayCars(cars);
         });
     </script>
 </body>
