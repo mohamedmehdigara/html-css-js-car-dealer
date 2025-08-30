@@ -62,7 +62,10 @@
                     <img id="modal-car-image" src="" alt="Car Image" class="w-full h-auto object-cover rounded-md mb-4 md:mb-0 md:w-1/2">
                     <div class="md:w-1/2">
                         <p class="text-lg font-medium text-gray-700">Price: <span id="modal-car-price" class="font-bold text-blue-600"></span></p>
-                        <p class="mt-2 text-sm text-gray-500" id="modal-car-description"></p>
+                        <p class="mt-2 text-gray-700">Year: <span id="modal-car-year" class="font-medium"></span></p>
+                        <p class="mt-2 text-gray-700">Mileage: <span id="modal-car-mileage" class="font-medium"></span></p>
+                        <p class="mt-2 text-gray-700">Color: <span id="modal-car-color" class="font-medium"></span></p>
+                        <p class="mt-4 text-sm text-gray-500" id="modal-car-description"></p>
                     </div>
                 </div>
             </div>
@@ -84,6 +87,9 @@
             const closeModalBtn = document.getElementById('close-modal');
             const modalCarName = document.getElementById('modal-car-name');
             const modalCarPrice = document.getElementById('modal-car-price');
+            const modalCarYear = document.getElementById('modal-car-year');
+            const modalCarMileage = document.getElementById('modal-car-mileage');
+            const modalCarColor = document.getElementById('modal-car-color');
             const modalCarDescription = document.getElementById('modal-car-description');
             const modalCarImage = document.getElementById('modal-car-image');
 
@@ -92,13 +98,15 @@
             const makeFilter = document.getElementById('make-filter');
             const yearFilter = document.getElementById('year-filter');
 
-            // Sample car data
+            // Sample car data with enhanced details
             const cars = [
                 {
                     make: 'Honda',
                     model: 'Civic',
                     year: 2022,
                     price: 25000,
+                    mileage: '15,000 miles',
+                    color: 'Modern Steel Metallic',
                     description: 'The 2022 Honda Civic is a stylish, reliable sedan with excellent fuel economy. Perfect for daily commutes.',
                     image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Honda+Civic'
                 },
@@ -107,6 +115,8 @@
                     model: 'Model 3',
                     year: 2023,
                     price: 45000,
+                    mileage: '8,000 miles',
+                    color: 'Pearl White Multi-Coat',
                     description: 'A groundbreaking electric vehicle with impressive performance and cutting-edge technology. Experience the future of driving.',
                     image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Tesla+Model+3'
                 },
@@ -115,6 +125,8 @@
                     model: 'Mustang',
                     year: 2021,
                     price: 35000,
+                    mileage: '22,500 miles',
+                    color: 'Race Red',
                     description: 'Classic American muscle car with a powerful engine and iconic design. Turn heads everywhere you go.',
                     image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Ford+Mustang'
                 },
@@ -123,6 +135,8 @@
                     model: 'RAV4',
                     year: 2023,
                     price: 30000,
+                    mileage: '12,000 miles',
+                    color: 'Magnetic Gray Metallic',
                     description: 'A versatile and dependable compact SUV, ideal for family adventures and city driving. Known for its reliability.',
                     image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Toyota+RAV4'
                 },
@@ -131,6 +145,8 @@
                     model: 'X5',
                     year: 2022,
                     price: 60000,
+                    mileage: '18,750 miles',
+                    color: 'Black Sapphire Metallic',
                     description: 'Luxury SUV combining elegant design with powerful performance. Offers a smooth ride and premium features.',
                     image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=BMW+X5'
                 },
@@ -139,6 +155,8 @@
                     model: 'Wrangler',
                     year: 2021,
                     price: 38000,
+                    mileage: '28,000 miles',
+                    color: 'Sting-Gray Clearcoat',
                     description: 'The ultimate off-road vehicle, built to handle any terrain. Get ready for your next adventure.',
                     image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Jeep+Wrangler'
                 },
@@ -147,6 +165,8 @@
                     model: 'Silverado',
                     year: 2023,
                     price: 42000,
+                    mileage: '10,500 miles',
+                    color: 'Summit White',
                     description: 'A reliable and strong pickup truck, perfect for work or play. Great towing capacity and rugged build.',
                     image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Chevy+Silverado'
                 },
@@ -155,6 +175,8 @@
                     model: 'Altima',
                     year: 2022,
                     price: 28000,
+                    mileage: '20,000 miles',
+                    color: 'Super Black',
                     description: 'A comfortable and spacious sedan with modern features. Offers a great balance of performance and fuel efficiency.',
                     image_url: 'https://placehold.co/400x300/e2e8f0/1a202c?text=Nissan+Altima'
                 }
@@ -233,6 +255,9 @@
                     const carData = JSON.parse(event.target.getAttribute('data-car'));
                     modalCarName.textContent = `${carData.make} ${carData.model}`;
                     modalCarPrice.textContent = formatPrice(carData.price);
+                    modalCarYear.textContent = carData.year;
+                    modalCarMileage.textContent = carData.mileage;
+                    modalCarColor.textContent = carData.color;
                     modalCarDescription.textContent = carData.description;
                     modalCarImage.src = carData.image_url;
                     detailsModal.classList.remove('hidden');
