@@ -197,6 +197,49 @@
                 </ul>
             </div>
             
+            <!-- FAQ Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Frequently Asked Questions</h3>
+                <div class="space-y-4">
+                    <details class="bg-gray-50 rounded-lg shadow-sm p-6 cursor-pointer">
+                        <summary class="font-semibold text-gray-900 text-lg flex justify-between items-center">
+                            <span>Do you offer financing options?</span>
+                            <svg class="w-5 h-5 transition-transform duration-200 transform details-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </summary>
+                        <p class="mt-4 text-gray-600 leading-relaxed">Yes, we work with a wide network of lenders to provide flexible and competitive financing options. Our finance team will help you find the best plan for your budget and credit situation.</p>
+                    </details>
+                    <details class="bg-gray-50 rounded-lg shadow-sm p-6 cursor-pointer">
+                        <summary class="font-semibold text-gray-900 text-lg flex justify-between items-center">
+                            <span>Can I trade in my old car?</span>
+                            <svg class="w-5 h-5 transition-transform duration-200 transform details-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </summary>
+                        <p class="mt-4 text-gray-600 leading-relaxed">Absolutely! We accept trade-ins for both new and used vehicle purchases. Our team will provide a fair and transparent appraisal of your vehicle's value.</p>
+                    </details>
+                    <details class="bg-gray-50 rounded-lg shadow-sm p-6 cursor-pointer">
+                        <summary class="font-semibold text-gray-900 text-lg flex justify-between items-center">
+                            <span>Do your vehicles come with a warranty?</span>
+                            <svg class="w-5 h-5 transition-transform duration-200 transform details-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </summary>
+                        <p class="mt-4 text-gray-600 leading-relaxed">Many of our vehicles, both new and certified pre-owned, come with a manufacturer or dealer warranty. We also offer extended warranty plans for added peace of mind.</p>
+                    </details>
+                    <details class="bg-gray-50 rounded-lg shadow-sm p-6 cursor-pointer">
+                        <summary class="font-semibold text-gray-900 text-lg flex justify-between items-center">
+                            <span>How can I schedule a test drive?</span>
+                            <svg class="w-5 h-5 transition-transform duration-200 transform details-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </summary>
+                        <p class="mt-4 text-gray-600 leading-relaxed">You can schedule a test drive by calling our sales team at (555) 123-4567 or by visiting our contact page to fill out a form. We'll get you set up with a time that works for you!</p>
+                    </details>
+                </div>
+            </div>
+
             <!-- Customer Testimonials Section -->
             <div class="mb-12">
                 <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">What Our Customers Say</h3>
@@ -257,7 +300,7 @@
             <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
                 Explore our extensive inventory of new and pre-owned vehicles. Our team is here to help you every step of the way.
             </p>
-            <a href="inventory.html" class="inline-block bg-blue-600 text-white font-medium py-3 px-8 rounded-full shadow-lg hover:bg-blue-700 transition-colors duration-200">View Our Inventory</a>
+            <a href="index.html" class="inline-block bg-blue-600 text-white font-medium py-3 px-8 rounded-full shadow-lg hover:bg-blue-700 transition-colors duration-200">View Our Inventory</a>
         </div>
     </main>
 
@@ -349,6 +392,19 @@
                 if (event.target === modal) {
                     closeModal();
                 }
+            });
+
+            // Handle FAQ arrow rotation on open/close
+            const detailsElements = document.querySelectorAll('details');
+            detailsElements.forEach(details => {
+                details.addEventListener('toggle', () => {
+                    const arrow = details.querySelector('.details-arrow');
+                    if (details.open) {
+                        arrow.style.transform = 'rotate(90deg)';
+                    } else {
+                        arrow.style.transform = 'rotate(0deg)';
+                    }
+                });
             });
         });
     </script>
